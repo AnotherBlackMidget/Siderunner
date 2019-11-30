@@ -1,0 +1,129 @@
+class Generator
+{
+  String genString;
+  int biomes;
+  int biomeSize;
+  char biomeType;
+  int chunkCount, chunkCount2;
+  char chunkType;
+  int tileCount;
+  Tile[][] tiles;
+  color presetTile;
+  
+  public Generator()
+  {
+    chunkCount = 0;
+    
+    
+    
+    //------------------------------------------------------------------------------
+    genString = "("; // () = Map Start/End 
+    
+    biomes = (int) random(2,6);
+    for(int i = 0; i<biomes; i++) 
+    {
+      biomeType = (char) random(49,54); genString += biomeType; // 1 = Grass, 2 = Desert, 3 = Snow, 4 = Forest, 5 = Cave
+      genString += '['; // [] = Biome Start/End
+      
+      biomeSize = (int) random(3,8);
+      for(int j = 0; j<biomeSize; j++)
+      {
+        if(chunkCount != 0)
+        {
+          chunkType = (char) random(98,108); genString += chunkType; // a = Empty, z = End
+          //genString += '{'; // {} = Chunk Start/End
+          
+          //Chunk Content
+          
+          //genString += '}';
+          chunkCount++;
+        }
+        else
+        {
+          chunkType = 'a'; genString += chunkType; // 0 = Empty
+          //genString += '{';
+          //genString += '}';
+          chunkCount++;
+        }
+      }
+      if(i == biomes-1)
+      {
+        genString += 'z';
+        //chunkCount++;
+      }
+      genString += ']';
+
+    }
+    
+    genString += ')';
+    
+    tileCount = chunkCount*32;
+    
+    println(genString);
+    println(chunkCount);
+    println(tileCount);
+  }
+ 
+  Tile[][] Generate()
+  {
+    char[] s = genString.toCharArray();
+    tiles = new Tile[tileCount][3];
+    chunkCount2 = 0;
+    
+    for(int k=0; k<genString.length(); k++)
+    {
+      //********************************************************************************
+      if(k+1<genString.length())
+      {
+        if(s[k+1] == '[')
+        {
+          switch(s[k])
+          {
+            case '1':
+              presetTile = color(50, 200, 50);
+              break;
+              
+            case '2':
+              presetTile = color(255, 229, 204);
+              break;
+              
+            case '3':
+              presetTile = color(255, 255, 255);
+              break;
+              
+            case '4':
+              presetTile = color(0, 102, 51);
+              break;
+              
+            case '5':
+              presetTile = color(100, 100, 100);
+              break;
+              
+            case '6':
+              presetTile = color(50, 50, 200);
+              break;
+          } 
+        }
+      }
+      //********************************************************************************
+      if(s[k] >= 97 && s[k] <= 108)
+      {
+        for(int i=0; i<32; i++)
+        {
+          for(int j=0; j<3; j++)
+          {
+            tiles[i+(32*chunkCount2)][j] = new Tile(presetTile, (i+(32*chunkCount2) )*32, height-j*32-32, 's');
+          }
+        }
+        chunkCount2++;
+      }
+    }
+
+    return tiles;
+  }
+  
+  int tileCount()
+  {
+    return tileCount;
+  }
+}
