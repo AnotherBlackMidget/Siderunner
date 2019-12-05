@@ -1,5 +1,6 @@
 class Hero extends GraphicObject
 {
+  int health;
   int jumpCount;
   boolean jumpDebounce;
   int w, h;
@@ -11,6 +12,7 @@ class Hero extends GraphicObject
   
   Hero()
   {
+    gun = new Weapon("flamethrower");
     anim = new Animation();
     location = new PVector(width/2-8, height - 160);
     velocity = new PVector (0, 0);
@@ -43,7 +45,7 @@ class Hero extends GraphicObject
   void display()
   {
     
-      fill(255,0,0);
+      fill(0,255,0);
       //rect(location.x,location.y,w,h);
       
       if(jumpCount == 0)
@@ -107,5 +109,10 @@ class Hero extends GraphicObject
       jumpCount++;
       jumpDebounce = true;
     } 
+  }
+  
+  void fire()
+  {
+    gun.fire(location);
   }
 }
